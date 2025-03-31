@@ -1,74 +1,39 @@
 #include "Graph.h"
+#include "Algorithms.h"
 #include <iostream>
+#include <stdexcept>
 
+using namespace std;
 using namespace graph;
 
-void printMenu() {
-    std::cout << "\n===== Graph Menu =====\n";
-    std::cout << "1. Add Edge\n";
-    std::cout << "2. Remove Edge\n";
-    std::cout << "3. Print Graph\n";
-    std::cout << "4. Exit\n";
-    std::cout << "======================\n";
-    std::cout << "Enter your choice: ";
-}
-
 int main() {
-    int numVertices;
+    try {
+        cout << "=== DFS with Cycles Test ===" << endl;
 
-    std::cout << "Enter number of vertices: ";
-    std::cin >> numVertices;
+        // Create a graph with 6 vertices
+        Graph g(6);
 
-    if (numVertices <= 0) {
-        std::cerr << "Error: Number of vertices must be greater than 0.\n";
-        return 1;
+        // Build a graph that includes a cycle: 0-1-2-3-0
+        g.addEdge(0, 1);
+        g.addEdge(1, 2);
+        g.addEdge(2, 3);
+        g.addEdge(3, 0); // back edge
+
+        // Add some more connections
+        g.addEdge(2, 4);
+        g.addEdge(4, 5);
+
+        cout << "\nOriginal graph:" << endl;
+        g.printGraph();
+
+        // Run DFS from vertex 0
+        Graph dfsTree = Algorithms::dfs(g, 0);
+
+        cout << "\nDFS tree (starting from vertex 0):" << endl;
+        dfsTree.printGraph();
     }
-
-    Graph g(numVertices);
-    int choice;
-
-    while (true) {
-        printMenu();
-        std::cin >> choice;
-
-        if (choice == 1) {
-            int src, dest, weight;
-            std::cout << "Enter source vertex: ";
-            std::cin >> src;
-            std::cout << "Enter destination vertex: ";
-            std::cin >> dest;
-            std::cout << "Enter edge weight: ";
-            std::cin >> weight;
-
-            try {
-                g.addEdge(src, dest, weight);
-                std::cout << "✅ Edge (" << src << ", " << dest << ") added successfully.\n";
-            } catch (const std::exception &e) {
-                std::cerr << "❌ Error: " << e.what() << "\n";
-            }
-
-        } else if (choice == 2) {
-            int src, dest;
-            std::cout << "Enter source vertex: ";
-            std::cin >> src;
-            std::cout << "Enter destination vertex: ";
-            std::cin >> dest;
-
-            try {
-                g.removeEdge(src, dest);
-                std::cout << "✅ Edge (" << src << ", " << dest << ") removed successfully.\n";
-            } catch (const std::exception &e) {
-                std::cerr << "❌ Error: " << e.what() << "\n";
-            }
-
-        } else if (choice == 3) {
-            g.printGraph();
-        } else if (choice == 4) {
-            std::cout << "🔚 Exiting program...\n";
-            break;
-        } else {
-            std::cout << "❌ Invalid choice. Please enter a valid option.\n";
-        }
+    catch (const exception& e) {
+        cout << "Exception: " << e.what() << endl;
     }
 
     return 0;
