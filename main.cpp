@@ -1,40 +1,33 @@
+#include <iostream>
 #include "Graph.h"
 #include "Algorithms.h"
-#include <iostream>
-#include <stdexcept>
 
 using namespace std;
 using namespace graph;
 
 int main() {
-    try {
-        cout << "=== DFS with Cycles Test ===" << endl;
+    cout << "=== Prim's Algorithm Test ===" << endl;
 
-        // Create a graph with 6 vertices
-        Graph g(6);
+    // גרף עם 6 קודקודים
+    Graph g(6);
 
-        // Build a graph that includes a cycle: 0-1-2-3-0
-        g.addEdge(0, 1);
-        g.addEdge(1, 2);
-        g.addEdge(2, 3);
-        g.addEdge(3, 0); // back edge
+    // יצירת קשתות עם משקלים שונים
+    g.addEdge(0, 1, 4);
+    g.addEdge(0, 2, 3);
+    g.addEdge(1, 2, 1);
+    g.addEdge(1, 3, 2);
+    g.addEdge(2, 3, 4);
+    g.addEdge(3, 4, 2);
+    g.addEdge(4, 5, 6);
 
-        // Add some more connections
-        g.addEdge(2, 4);
-        g.addEdge(4, 5);
+    cout << "\n📌 Original graph:\n";
+    g.printGraph();
 
-        cout << "\nOriginal graph:" << endl;
-        g.printGraph();
+    // הרצת פרים
+    Graph mst = Algorithms::prim(g);
 
-        // Run DFS from vertex 0
-        Graph dfsTree = Algorithms::dfs(g, 0);
-
-        cout << "\nDFS tree (starting from vertex 0):" << endl;
-        dfsTree.printGraph();
-    }
-    catch (const exception& e) {
-        cout << "Exception: " << e.what() << endl;
-    }
+    cout << "\n🌲 Minimum Spanning Tree (Prim's result):\n";
+    mst.printGraph();
 
     return 0;
 }

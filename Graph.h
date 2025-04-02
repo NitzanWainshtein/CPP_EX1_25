@@ -32,6 +32,7 @@ namespace graph {
         int getNumOfVertices() const;
         const Edge* getNeighbors(int v) const;
         int getNumOfNeighbors(int v) const;
+        int getNumOfEdges() const;
 
     };
 } // graph

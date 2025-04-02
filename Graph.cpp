@@ -116,4 +116,12 @@ namespace graph {
         }
         return vSizes[v];
     }
+
+    int Graph::getNumOfEdges() const {
+        int edgeCount = 0;
+        for (int i = 0; i < numOfVertices; ++i) {
+            edgeCount += vSizes[i];
+        }
+        return edgeCount;
+    }
 }

@@ -8,4 +8,6 @@ add_executable(CPP_EX1_25
         Graph.cpp
         Algorithms.cpp
         Queue.cpp
+        PriorityQueue.cpp
+        UnionFind.cpp
 )
