@@ -3,9 +3,7 @@
 
 
 #include "../include/Algorithms.h"
-
 #include <stdexcept>
-
 #include "../include/PriorityQueue.h"
 #include "../include/Queue.h"
 #include "../include/UnionFind.h"
@@ -17,20 +15,21 @@ namespace graph {
             throw std::out_of_range("Start vertex is out of range.");
         }
 
-        Graph bfsTree(n);
+        Graph bfsTree(n); // create empty graph with n vertices
 
-        bool *visited = new bool[n]();
+        bool *visited = new bool[n](); //boolean array to indicate if visited
 
-        Queue q(n);
+        Queue q(n); //initiate a queue sized "n"
 
-        visited[start] = true;
-        q.enqueue(start);
+        visited[start] = true; //start the algorithm on first vertex
+        q.enqueue(start); //add the vertex to the queue
 
         while (!q.isEmpty()) {
+            //as long as the queue is not empty
             int u = q.dequeue();
 
-            const Edge *uNeighbors = g.getNeighbors(u);
-            int numOfNeighbors = g.getNumOfNeighbors(u);
+            const Edge *uNeighbors = g.getNeighbors(u); // pointer to neighbor array
+            int numOfNeighbors = g.getNumOfNeighbors(u); //how many are there
 
             for (int i = 0; i < numOfNeighbors; ++i) {
                 int v = uNeighbors[i].dest;
@@ -45,7 +44,7 @@ namespace graph {
         return bfsTree;
     }
 
-    // Helper function for DFS traversal
+    // DFS helper
     void dfsVisit(const Graph &g, Graph &dfsTree, bool *visited, int u) {
         visited[u] = true;
 
@@ -54,27 +53,37 @@ namespace graph {
 
         for (int i = 0; i < numNeighbors; ++i) {
             int v = neighbors[i].dest;
-
             if (!visited[v]) {
-                dfsTree.addEdge(u, v, neighbors[i].weight); // Tree Edge
+                // Use addEdge(...) for an undirected edge in dfsTree
+                // That means it adds both (u->v) and (v->u)
+                dfsTree.addEdge(u, v, neighbors[i].weight);
                 dfsVisit(g, dfsTree, visited, v);
             }
         }
     }
 
-    // DFS algorithm
     Graph Algorithms::dfs(const Graph &g, int start) {
         int n = g.getNumOfVertices();
         if (start < 0 || start >= n) {
             throw std::out_of_range("Start vertex is out of range.");
         }
-        Graph dfsTree(n);
-        bool *visited = new bool[n]();
-        dfsVisit(g, dfsTree, visited, start);
-        delete[] visited;
 
+        Graph dfsTree(n); //create empty graph with n vertices
+        bool *visited = new bool[n](); //boolean array to indicate if visited
+
+        // DFS from the specified start node
+        dfsVisit(g, dfsTree, visited, start);
+
+        // Continue for all unvisited nodes to form a full DFS forest
+        for (int i = 0; i < n; ++i) {
+            if (!visited[i]) {
+                dfsVisit(g, dfsTree, visited, i);
+            }
+        }
+        delete[] visited;
         return dfsTree;
     }
+
 
     Graph Algorithms::dijkstra(const Graph &g, int start) {
         int n = g.getNumOfVertices();
@@ -134,7 +143,7 @@ namespace graph {
             int u = parent[v];
             if (u != -1) {
                 int weight = distance[v] - distance[u];
-                tree.addEdgeOneDirection(u, v, weight); // directed edge
+                tree.addEdge(u, v, weight);
             }
         }
 
@@ -213,11 +222,11 @@ namespace graph {
             int weight;
         };
 
-        EdgeData* edges = new EdgeData[maxEdges];
+        EdgeData *edges = new EdgeData[maxEdges];
         int edgeCount = 0;
 
         for (int i = 0; i < n; i++) {
-            const Edge* neighbors = g.getNeighbors(i);
+            const Edge *neighbors = g.getNeighbors(i);
             int numNeighbors = g.getNumOfNeighbors(i);
 
             for (int j = 0; j < numNeighbors; j++) {

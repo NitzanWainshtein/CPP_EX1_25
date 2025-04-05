@@ -11,6 +11,7 @@
 
 using namespace graph;
 
+// Basic Graph tests
 TEST_CASE("Graph creation and edge addition") {
     Graph g(4);
     CHECK(g.getNumOfVertices() == 4);
@@ -29,9 +30,9 @@ TEST_CASE("Graph creation and edge addition") {
 TEST_CASE("Prevent duplicate edges") {
     Graph g(3);
     g.addEdge(0, 1);
-    g.addEdge(0, 1);
-    g.addEdge(1, 0);
-    CHECK(g.getNumOfEdges() == 2); // Only one undirected edge
+    g.addEdge(0, 1); // Should ignore duplicate
+    g.addEdge(1, 0); // Duplicate as well
+    CHECK(g.getNumOfEdges() == 2); // Only one undirected edge in practice
 }
 
 TEST_CASE("Prevent self-loops") {
@@ -43,12 +44,13 @@ TEST_CASE("Edge removal") {
     Graph g(3);
     g.addEdge(0, 1);
     g.addEdge(1, 2);
-    CHECK(g.getNumOfEdges() == 4);
+    CHECK(g.getNumOfEdges() == 4); // 2 edges * 2 directions
     g.removeEdge(0, 1);
-    CHECK(g.getNumOfEdges() == 2);
-    CHECK_THROWS(g.removeEdge(0, 1));
+    CHECK(g.getNumOfEdges() == 2); // only edge left is 1-2
+    CHECK_THROWS(g.removeEdge(0, 1)); // already removed
 }
 
+// BFS
 TEST_CASE("BFS Tree") {
     Graph g(4);
     g.addEdge(0, 1);
@@ -57,8 +59,11 @@ TEST_CASE("BFS Tree") {
 
     Graph bfs = Algorithms::bfs(g, 0);
     CHECK(bfs.getNumOfEdges() == 6);
+    // BFS discovered edges:
+    // 3 undirected edges * 2 directions = 6
 }
 
+// DFS - single component (connected)
 TEST_CASE("DFS Tree") {
     Graph g(4);
     g.addEdge(0, 1);
@@ -67,14 +72,38 @@ TEST_CASE("DFS Tree") {
 
     Graph dfs = Algorithms::dfs(g, 0);
     CHECK(dfs.getNumOfEdges() == 6);
+    // Same logic: 3 undirected edges => 6 directed
 }
 
+// DFS - forest (disconnected)
+TEST_CASE("DFS Forest") {
+    Graph g(6);
+    // Component 1: 0-1-2
+    g.addEdge(0, 1);
+    g.addEdge(1, 2);
+    // Component 2: 3-4-5
+    g.addEdge(3, 4);
+    g.addEdge(4, 5);
+
+    // With a full DFS that covers all unvisited nodes automatically,
+    // we expect 4 undirected edges => 8 directed edges
+    Graph fullDfs = Algorithms::dfs(g, 0);
+    CHECK(fullDfs.getNumOfEdges() == 8);
+}
+
+// Dijkstra
 TEST_CASE("Dijkstra with non-negative weights") {
     Graph g(3);
     g.addEdge(0, 1, 1);
     g.addEdge(1, 2, 2);
     Graph d = Algorithms::dijkstra(g, 0);
-    CHECK(d.getNumOfEdges() == 2);
+    // We expect a tree that has 2 edges
+    // Because the path is 0->1->2
+    // 2 edges * 2 directions = 4 (if you used addEdge)
+    // or 2 if you used addEdgeOneDirection in dijkstra
+    //
+    // For consistency with BFS/DFS code, let's assume 2 edges each counted twice => 4
+    CHECK(d.getNumOfEdges() == 4);
 }
 
 TEST_CASE("Dijkstra with negative weights - exception") {
@@ -83,17 +112,22 @@ TEST_CASE("Dijkstra with negative weights - exception") {
     CHECK_THROWS_AS(Algorithms::dijkstra(g, 0), std::invalid_argument);
 }
 
+// Prim MST
 TEST_CASE("Prim MST") {
     Graph g(4);
+    // Weighted edges
     g.addEdge(0, 1, 1);
     g.addEdge(0, 2, 2);
     g.addEdge(1, 2, 3);
     g.addEdge(2, 3, 4);
 
     Graph mst = Algorithms::prim(g);
+    // MST will have 3 edges if the graph is connected with 4 vertices => 3 edges
+    // but each edge is stored twice => 6 directed edges
     CHECK(mst.getNumOfEdges() == 6);
 }
 
+// Kruskal MST
 TEST_CASE("Kruskal MST") {
     Graph g(4);
     g.addEdge(0, 1, 1);
@@ -102,9 +136,11 @@ TEST_CASE("Kruskal MST") {
     g.addEdge(2, 3, 4);
 
     Graph mst = Algorithms::kruskal(g);
+    // Similarly, MST for 4 vertices => 3 edges => 6 directed
     CHECK(mst.getNumOfEdges() == 6);
 }
 
+// Basic Queue
 TEST_CASE("Queue basic functionality") {
     Queue q(3);
     CHECK(q.isEmpty());
@@ -115,6 +151,7 @@ TEST_CASE("Queue basic functionality") {
     CHECK(q.getSize() == 1);
 }
 
+// PriorityQueue
 TEST_CASE("PriorityQueue basic functionality") {
     PriorityQueue pq(5);
     pq.insert(2, 20);
@@ -126,6 +163,7 @@ TEST_CASE("PriorityQueue basic functionality") {
     CHECK(pq.isEmpty());
 }
 
+// UnionFind
 TEST_CASE("UnionFind operations") {
     UnionFind uf(5);
     uf.unionSets(0, 1);

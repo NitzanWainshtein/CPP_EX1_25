@@ -6,6 +6,10 @@
 #include <iostream>
 
 namespace graph {
+    /**
+     * Constructor - creates a Graph with n vertices.
+     * @param n number of vertices.
+     */
     Graph::Graph(int n) {
         if (n <= 0) {
             throw std::invalid_argument("Number of vertices must be positive");
@@ -22,6 +26,9 @@ namespace graph {
         }
     }
 
+    /**
+     * Destructor - frees dynamic memory of adjacency lists and helper arrays.
+     */
     Graph::~Graph() {
         for (int i = 0; i < numOfVertices; ++i) {
             delete[] adjList[i];
@@ -31,6 +38,12 @@ namespace graph {
         delete[] vMem;
     }
 
+    /**
+     * Adds an undirected edge between src and dest (no duplicates, no self-loops).
+     * @param src source vertex
+     * @param dest destination vertex
+     * @param weight edge weight
+     */
     void Graph::addEdge(int src, int dest, int weight) {
         if (src < 0 || src >= numOfVertices || dest < 0 || dest >= numOfVertices) {
             throw std::out_of_range("Vertex index out of range");
@@ -50,6 +63,13 @@ namespace graph {
         addEdgeOneDirection(dest, src, weight);
     }
 
+    /**
+     * Adds a single directed edge from 'from' to 'to'.
+     * Resizes adjacency array if needed.
+     * @param from source vertex
+     * @param to destination vertex
+     * @param weight edge weight
+     */
     void Graph::addEdgeOneDirection(int from, int to, int weight) {
         if (vSizes[from] == vMem[from]) {
             int newCapacity = vMem[from] * 2;
@@ -67,6 +87,10 @@ namespace graph {
         vSizes[from]++;
     }
 
+    /**
+     * Removes an undirected edge between v1 and v2.
+     * Throws out_of_range if invalid vertices, invalid_argument if edge not found.
+     */
     void Graph::removeEdge(int v1, int v2) {
         if (v1 < 0 || v1 >= numOfVertices || v2 < 0 || v2 >= numOfVertices) {
             throw std::out_of_range("Vertex index out of range");
@@ -80,6 +104,10 @@ namespace graph {
         }
     }
 
+    /**
+     * Removes a single directed edge from 'src' to 'dest'.
+     * @return true if removed, false otherwise.
+     */
     bool Graph::removeEdgeOneDirection(int src, int dest) {
         for (int i = 0; i < vSizes[src]; ++i) {
             if (adjList[src][i].dest == dest) {
@@ -91,20 +119,31 @@ namespace graph {
         return false;
     }
 
+    /**
+     * Prints adjacency list for each vertex.
+     */
     void Graph::printGraph() {
         for (int i = 0; i < numOfVertices; i++) {
             std::cout << "Vertex " << i << ": -> ";
             for (int j = 0; j < vSizes[i]; ++j) {
-                std::cout << "(v" << adjList[i][j].dest << ", weight=" << adjList[i][j].weight << ") ";
+                std::cout << "(v" << adjList[i][j].dest
+                        << ", weight=" << adjList[i][j].weight << ") ";
             }
             std::cout << std::endl;
         }
     }
 
+    /**
+     * @return number of vertices in the graph.
+     */
     int Graph::getNumOfVertices() const {
         return numOfVertices;
     }
 
+    /**
+     * Returns pointer to the neighbor array of vertex v.
+     * @param v vertex index
+     */
     const Edge *Graph::getNeighbors(int v) const {
         if (v < 0 || v >= numOfVertices) {
             throw std::out_of_range("Vertex index out of range");
@@ -112,6 +151,10 @@ namespace graph {
         return adjList[v];
     }
 
+    /**
+     * @param v vertex index
+     * @return number of neighbors of v
+     */
     int Graph::getNumOfNeighbors(int v) const {
         if (v < 0 || v >= numOfVertices) {
             throw std::out_of_range("Vertex index out of range");
@@ -119,6 +162,10 @@ namespace graph {
         return vSizes[v];
     }
 
+    /**
+     * @return total number of directed edges in the graph.
+     * For an undirected graph, each edge is counted twice.
+     */
     int Graph::getNumOfEdges() const {
         int edgeCount = 0;
         for (int i = 0; i < numOfVertices; ++i) {
@@ -126,4 +173,4 @@ namespace graph {
         }
         return edgeCount;
     }
-}
+} // namespace graph
