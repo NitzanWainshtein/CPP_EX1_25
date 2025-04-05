@@ -1,9 +1,10 @@
-//
-// Created by nitzan on 3/31/25.
-//
+// Nitzanwa@gmail.com
+// Algorithms.h - Declaration of graph algorithms: BFS, DFS, Dijkstra, Prim, and Kruskal.
+
 
 #ifndef ALGORITHMS_H
 #define ALGORITHMS_H
+
 #include "Graph.h"
 
 namespace graph {
@@ -21,4 +22,4 @@ namespace graph {
     };
 }
 
-#endif //ALGORITHM_H
+#endif // ALGORITHMS_H

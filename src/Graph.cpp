@@ -1,10 +1,7 @@
-//
-// Created by nitzan on 3/31/25.
 // Nitzanwa@gmail.com
-// ID 209086263
-//
+// Graph.cpp - Graph implementation using adjacency list
 
-#include "Graph.h"
+#include "../include/Graph.h"
 #include <stdexcept>
 #include <iostream>
 
@@ -15,16 +12,13 @@ namespace graph {
         }
         numOfVertices = n;
         adjList = new Edge *[numOfVertices];
-        //define helper arrays
         vSizes = new int[numOfVertices];
         vMem = new int[numOfVertices];
 
-        //initialize vertices adjList
-
         for (int i = 0; i < numOfVertices; ++i) {
-            vMem[i] = 2; //saves how much memory is allocated for specific vertex adjList
-            vSizes[i] = 0; //there are no adj yet
-            adjList[i] = new Edge[vMem[i]]; //allocates memory for 2 adj
+            vMem[i] = 2;
+            vSizes[i] = 0;
+            adjList[i] = new Edge[vMem[i]];
         }
     }
 
@@ -41,6 +35,17 @@ namespace graph {
         if (src < 0 || src >= numOfVertices || dest < 0 || dest >= numOfVertices) {
             throw std::out_of_range("Vertex index out of range");
         }
+        if (src == dest) {
+            throw std::invalid_argument("Self-loops are not allowed");
+        }
+
+        // Prevent duplicates
+        for (int i = 0; i < vSizes[src]; ++i) {
+            if (adjList[src][i].dest == dest) {
+                return; // Edge already exists
+            }
+        }
+
         addEdgeOneDirection(src, dest, weight);
         addEdgeOneDirection(dest, src, weight);
     }
@@ -86,7 +91,6 @@ namespace graph {
         return false;
     }
 
-
     void Graph::printGraph() {
         for (int i = 0; i < numOfVertices; i++) {
             std::cout << "Vertex " << i << ": -> ";
@@ -96,8 +100,6 @@ namespace graph {
             std::cout << std::endl;
         }
     }
-
-    //Helper functions:
 
     int Graph::getNumOfVertices() const {
         return numOfVertices;
