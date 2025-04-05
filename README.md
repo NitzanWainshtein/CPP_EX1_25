@@ -6,7 +6,7 @@
 
 ---
 
-## 🧠 Project Overview
+##  Project Overview
 This project implements an undirected graph using an **adjacency list** in C++. It includes classical graph algorithms such as BFS, DFS, Dijkstra, Prim, and Kruskal. Additionally, the project includes custom implementations of supporting data structures: Queue, PriorityQueue, and Union-Find.
 
 The implementation is done **without using the STL**, and based entirely on low-level arrays and manual memory management, as required.
