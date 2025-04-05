@@ -1,6 +1,6 @@
 # CPP_EX1_25
 
-**Author:** Nitzan Weissman  
+**Author:** Nitzan Wainshtein  
 **Email:** Nitzanwa@gmail.com  
 **ID:** 209086263
 
