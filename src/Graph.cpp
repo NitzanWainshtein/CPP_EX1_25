@@ -64,7 +64,7 @@ namespace graph {
     }
 
     /**
-     * Adds a single directed edge from 'from' to 'to'.
+     * Adds a single directed edge.
      * Resizes adjacency array if needed.
      * @param from source vertex
      * @param to destination vertex

@@ -1,5 +1,5 @@
 // Nitzanwa@gmail.com
-// PriorityQueue.cpp - Min-heap based priority queue implementation for graph algorithms.
+// PriorityQueue.cpp - Min-heap based priority queue implementation.
 
 #include "../include/PriorityQueue.h"
 #include <stdexcept>
@@ -44,7 +44,7 @@ namespace graph {
 
     /**
      * Inserts a new element into the priority queue.
-     * @param vertex Vertex index
+     * @param vertex V index
      * @param priority Priority value (lower is higher priority)
      */
     void PriorityQueue::insert(int vertex, int priority) {

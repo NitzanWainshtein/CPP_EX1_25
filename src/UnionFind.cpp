@@ -1,5 +1,5 @@
 // Nitzanwa@gmail.com
-// UnionFind.cpp - Disjoint-set (Union-Find) implementation with path compression and union by rank.
+// UnionFind.cpp - (Union-Find) implementation
 
 #include "../include/UnionFind.h"
 
@@ -21,7 +21,7 @@ namespace graph {
     /**
      * Finds the representative of the set containing x using path compression.
      * @param x Element to find
-     * @return Representative (root) of the set
+     * @return root of the set
      */
     int UnionFind::find(int x) {
         if (parent[x] != x)

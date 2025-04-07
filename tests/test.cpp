@@ -11,7 +11,7 @@
 
 using namespace graph;
 
-// Basic Graph tests
+
 TEST_CASE("Graph creation and edge addition") {
     Graph g(4);
     CHECK(g.getNumOfVertices() == 4);
@@ -97,12 +97,6 @@ TEST_CASE("Dijkstra with non-negative weights") {
     g.addEdge(0, 1, 1);
     g.addEdge(1, 2, 2);
     Graph d = Algorithms::dijkstra(g, 0);
-    // We expect a tree that has 2 edges
-    // Because the path is 0->1->2
-    // 2 edges * 2 directions = 4 (if you used addEdge)
-    // or 2 if you used addEdgeOneDirection in dijkstra
-    //
-    // For consistency with BFS/DFS code, let's assume 2 edges each counted twice => 4
     CHECK(d.getNumOfEdges() == 4);
 }
 
@@ -122,8 +116,6 @@ TEST_CASE("Prim MST") {
     g.addEdge(2, 3, 4);
 
     Graph mst = Algorithms::prim(g);
-    // MST will have 3 edges if the graph is connected with 4 vertices => 3 edges
-    // but each edge is stored twice => 6 directed edges
     CHECK(mst.getNumOfEdges() == 6);
 }
 
@@ -136,7 +128,6 @@ TEST_CASE("Kruskal MST") {
     g.addEdge(2, 3, 4);
 
     Graph mst = Algorithms::kruskal(g);
-    // Similarly, MST for 4 vertices => 3 edges => 6 directed
     CHECK(mst.getNumOfEdges() == 6);
 }
 

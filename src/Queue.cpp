@@ -1,5 +1,5 @@
 // Nitzanwa@gmail.com
-// Queue.cpp - Circular array-based queue implementation for graph algorithms.
+// Queue.cpp - Queue implementation for graph algorithms.
 
 #include "../include/Queue.h"
 #include <stdexcept>
@@ -8,7 +8,7 @@ namespace graph {
 
     /**
      * Constructor
-     * @param cap Maximum number of elements the queue can hold
+     * @param cap Max num of elements the queue can hold
      */
     Queue::Queue(int cap) {
         if (cap <= 0) {
